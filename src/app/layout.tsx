@@ -1,14 +1,26 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { IBM_Plex_Sans, JetBrains_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-ibm-plex-sans',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  weight: ['400', '500', '600'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'LLM Key Checker — Validate any LLM API key instantly',
   description:
-    'Paste your LLM API key and instantly verify it works. Supports 50+ providers including OpenAI, Anthropic, Groq, Gemini, AWS Bedrock, and all Chinese providers. Open source. No backend storage.',
+    'Paste your LLM API key and instantly verify it works. Supports 65+ providers including OpenAI, Anthropic, Groq, Gemini, AWS Bedrock. Open source. No storage.',
   keywords: ['LLM', 'API key', 'validator', 'OpenAI', 'Anthropic', 'Groq', 'Gemini', 'Bedrock'],
   openGraph: {
     title: 'LLM Key Checker',
@@ -20,7 +32,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${ibmPlexSans.variable} ${jetbrainsMono.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>

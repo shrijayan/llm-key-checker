@@ -3,31 +3,104 @@
 /* Dark mode: toggled by .dark class on <html> */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Custom brand color palette */
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+/*
+ * Two neutral scales, deliberately:
+ * - "ink"   → the console is a terminal window. Terminals are dark. Always.
+ *             It does not flip with the site's light/dark toggle.
+ * - "paper" → the page chrome around the console (header, hero, footer)
+ *             does flip with the toggle.
+ */
 @theme {
-  --color-brand-50: #f0f9ff;
-  --color-brand-100: #e0f2fe;
-  --color-brand-200: #bae6fd;
-  --color-brand-300: #7dd3fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
+  /* Ink — console neutrals (fixed dark) */
+  --color-ink-950: #0b0e14;
+  --color-ink-900: #12151d;
+  --color-ink-800: #1b1f2a;
+  --color-ink-700: #262b39;
+  --color-ink-600: #363c4d;
+  --color-ink-400: #6b7280;
+  --color-ink-200: #a6acbb;
+  --color-ink-100: #d7dae1;
+  --color-ink-50: #f1f2f5;
+
+  /* Paper — site-chrome neutrals (light mode) */
+  --color-paper-50: #f7f8fa;
+  --color-paper-100: #edeff3;
+  --color-paper-200: #e1e4ea;
+
+  /* Accent — desaturated periwinkle. Used for focus, selection, links. */
+  --color-accent-300: #a9c1fa;
+  --color-accent-400: #7aa2f7;
+  --color-accent-500: #5c87e8;
+  --color-accent-600: #4a6fcc;
+
+  /* Gold — key/value emphasis, like string-literal syntax highlighting */
+  --color-gold-300: #f0c88a;
+  --color-gold-400: #e0af68;
+
+  /* Success / error — muted terminal semantics, not neon */
+  --color-success-400: #9ece6a;
+  --color-success-600: #5c9a3e;
+  --color-error-400: #f7768e;
+  --color-error-600: #c1435f;
+
+  /* Typography */
+  --font-sans: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'Courier New', monospace;
 }
 
+/* ── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
   body {
-    @apply bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
+    @apply bg-paper-50 text-ink-900;
+    @apply dark:bg-ink-950 dark:text-ink-50;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Subtle dot grid — gives empty space texture instead of looking blank */
+    background-image: radial-gradient(circle, rgb(0 0 0 / 0.055) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .dark body {
+    background-image: radial-gradient(circle, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+  }
+
+  @keyframes blink {
+    0%,
+    49% {
+      opacity: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-blink,
+    .animate-fade-in {
+      animation: none !important;
+    }
   }
 }
 
-@utility glass {
-  background-color: rgb(255 255 255 / 0.8);
-  backdrop-filter: blur(4px);
+/* ── Custom utilities ──────────────────────────────────────────────────────── */
+@utility animate-blink {
+  animation: blink 1s step-end infinite;
 }
 
-.dark .glass {
-  background-color: rgb(17 24 39 / 0.8);
+@utility animate-fade-in {
+  animation: fade-in 0.15s ease-out both;
 }

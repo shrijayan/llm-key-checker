@@ -1,22 +1,20 @@
-import { Shield, Code, Eye } from 'lucide-react'
+import { ShieldCheck, Zap, GitBranch } from 'lucide-react'
+
+const ITEMS = [
+  { icon: ShieldCheck, label: 'no storage' },
+  { icon: Zap, label: 'stateless' },
+  { icon: GitBranch, label: 'open source' },
+] as const
 
 export function TrustBadge() {
   return (
-    <div className="mb-8 p-4 rounded-xl border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/30">
-      <div className="flex flex-wrap justify-center gap-6 text-sm text-green-700 dark:text-green-400">
-        <span className="flex items-center gap-2">
-          <Shield className="w-4 h-4" />
-          No backend storage — keys never saved
+    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 font-mono text-xs text-slate-500 dark:text-ink-400">
+      {ITEMS.map(({ icon: Icon, label }) => (
+        <span key={label} className="flex items-center gap-1.5">
+          <Icon className="w-3.5 h-3.5 text-success-600 dark:text-success-400" />
+          {label}
         </span>
-        <span className="flex items-center gap-2">
-          <Eye className="w-4 h-4" />
-          Stateless edge function — discards after check
-        </span>
-        <span className="flex items-center gap-2">
-          <Code className="w-4 h-4" />
-          Open source — verify the code yourself
-        </span>
-      </div>
+      ))}
     </div>
   )
 }

@@ -1,51 +1,52 @@
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { TrustBadge } from '@/components/TrustBadge'
-import { ProviderGrid } from '@/components/providers/ProviderGrid'
+import { KeyConsole } from '@/components/providers/KeyConsole'
 import { ALL_PROVIDERS } from '@/lib/providers/registry'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900">
-      <SiteHeader />
+    <div className="min-h-screen flex flex-col bg-paper-50 dark:bg-ink-950">
+      <SiteHeader providerCount={ALL_PROVIDERS.length} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-4">
-            LLM Key Checker
+      <main className="flex flex-col items-center px-4 pt-12 sm:pt-16 pb-16">
+        <div className="text-center mb-8 max-w-md">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-ink-900 dark:text-ink-50 mb-3 leading-tight">
+            Validate any LLM API key.
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Instantly verify any LLM API key across {ALL_PROVIDERS.length}+ providers.
-            Select your provider, paste your key, done.
+          <p className="text-sm sm:text-base text-slate-500 dark:text-ink-400 leading-relaxed">
+            Pick a provider, paste your key, see the real request and response.
+            Nothing is stored.
           </p>
         </div>
 
-        <TrustBadge />
+        <div className="w-full max-w-2xl">
+          <KeyConsole providers={ALL_PROVIDERS} />
+        </div>
 
-        <ProviderGrid providers={ALL_PROVIDERS} />
+        <div className="mt-8">
+          <TrustBadge />
+        </div>
       </main>
 
-      <footer className="text-center py-8 text-sm text-gray-500 dark:text-gray-500">
-        <p>
-          Open source ·{' '}
-          <a
-            href="https://github.com/shrijayan/llm-key-checker"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-gray-700 dark:hover:text-gray-300"
-          >
-            View source on GitHub
-          </a>{' '}
-          · Provider list auto-synced from{' '}
-          <a
-            href="https://github.com/BerriAI/litellm"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-gray-700 dark:hover:text-gray-300"
-          >
-            LiteLLM
-          </a>
-        </p>
+      <footer className="text-center py-5 text-xs font-mono text-slate-400 dark:text-ink-400 border-t border-paper-200 dark:border-ink-700">
+        open source ·{' '}
+        <a
+          href="https://github.com/shrijayan/llm-key-checker"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:text-slate-600 dark:hover:text-ink-100 transition-colors"
+        >
+          view source
+        </a>{' '}
+        · providers synced from{' '}
+        <a
+          href="https://github.com/BerriAI/litellm"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline underline-offset-2 hover:text-slate-600 dark:hover:text-ink-100 transition-colors"
+        >
+          litellm
+        </a>
       </footer>
     </div>
   )
