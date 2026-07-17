@@ -2,62 +2,73 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "timezone": "UTC",
-  "schedule": ["before 6am on Monday"],
-  "semanticCommits": "enabled",
-  "dependencyDashboard": true,
-  "minimumReleaseAge": "3 days",
-  "prHourlyLimit": 0,
-  "prConcurrentLimit": 10,
+  "schedule": ["every weekend"],
   "labels": ["dependencies"],
+  "dependencyDashboard": true,
+
   "packageRules": [
     {
-      "description": "Group all patch updates into one PR and auto-merge",
+      "description": "Auto-merge patch updates immediately after CI passes",
       "matchUpdateTypes": ["patch"],
-      "groupName": "all patch updates",
       "automerge": true,
-      "platformAutomerge": true
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "minimumReleaseAge": "0 days"
     },
     {
-      "description": "Auto-merge minor updates after CI passes (wait 5 days for yanked-package safety)",
+      "description": "Auto-merge minor updates after 3 days stability",
       "matchUpdateTypes": ["minor"],
       "automerge": true,
+      "automergeType": "pr",
       "platformAutomerge": true,
-      "minimumReleaseAge": "5 days"
+      "minimumReleaseAge": "3 days"
     },
     {
-      "description": "Major updates require manual review",
+      "description": "Auto-merge major updates after 7 days stability (enough time for ecosystem to report breakage)",
       "matchUpdateTypes": ["major"],
-      "automerge": false,
-      "labels": ["dependencies", "major-update"]
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "minimumReleaseAge": "7 days",
+      "stabilityDays": 7
     },
     {
-      "description": "Next.js is a framework update — always manual review",
-      "matchPackageNames": ["next", "eslint-config-next", "@next/bundle-analyzer"],
-      "groupName": "Next.js",
-      "automerge": false,
-      "labels": ["dependencies", "nextjs"]
-    },
-    {
-      "description": "React core — always manual review",
-      "matchPackageNames": ["react", "react-dom"],
-      "groupName": "React",
-      "automerge": false,
-      "labels": ["dependencies", "react"]
-    },
-    {
-      "description": "TypeScript type definitions — group and auto-merge",
-      "matchPackagePatterns": ["^@types/"],
+      "description": "Group all @types/* updates together",
+      "matchPackagePrefixes": ["@types/"],
       "groupName": "TypeScript type definitions",
       "automerge": true,
-      "platformAutomerge": true
+      "minimumReleaseAge": "0 days"
     },
     {
-      "description": "GitHub Actions workflows — auto-merge patch and minor",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "GitHub Actions",
+      "description": "Group Next.js + eslint-config-next together (must match versions)",
+      "matchPackageNames": ["next", "eslint-config-next"],
+      "groupName": "Next.js",
       "automerge": true,
-      "platformAutomerge": true
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Group React packages together",
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "groupName": "React",
+      "automerge": true,
+      "minimumReleaseAge": "7 days"
+    },
+    {
+      "description": "Group AWS SDK packages together",
+      "matchPackagePrefixes": ["@aws-sdk/"],
+      "groupName": "AWS SDK",
+      "automerge": true,
+      "minimumReleaseAge": "3 days"
     }
-  ]
+  ],
+
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "automerge": true
+  },
+
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+
+  "commitMessagePrefix": "chore(deps):"
 }

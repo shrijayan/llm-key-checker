@@ -1,47 +1,10 @@
-# Use this ONLY if you choose Dependabot over Renovate.
-# If using Renovate (recommended), keep only the github-actions block
-# and delete the npm block — Renovate handles npm better.
-
 version: 2
 updates:
-  # npm — weekly batch, groups patch+minor together
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "UTC"
-    labels:
-      - "dependencies"
-    open-pull-requests-limit: 10
-    groups:
-      # One PR for all patch+minor npm updates
-      patch-and-minor:
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-    ignore:
-      # Major updates open individual PRs for manual review (no ignore = they still get PRs)
-      []
-
-  # GitHub Actions — always useful to keep up to date
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "UTC"
     labels:
       - "dependencies"
-      - "github-actions"
-    groups:
-      github-actions-updates:
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
+    commit-message:
+      prefix: "chore(ci):"

@@ -1,0 +1,45 @@
+name: Sync Providers from LiteLLM
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # Daily at 6am UTC
+  workflow_dispatch:        # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  sync:
+    name: Sync Provider Registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # Needed to commit + push to main
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run provider sync script
+        run: node scripts/sync-providers.js
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet src/lib/providers/registry.generated.json \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push if changed
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "llmkeychecker-bot"
+          git config user.email "bot@llmkeychecker.dev"
+          git add src/lib/providers/registry.generated.json
+          git commit -m "chore(providers): auto-sync from LiteLLM [skip ci]"
+          git push

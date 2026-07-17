@@ -1,0 +1,334 @@
+[
+  {
+    "id": "abliteration",
+    "name": "Abliteration AI",
+    "baseUrl": "https://api.abliteration.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "aihubmix",
+    "name": "AI Hub Mix",
+    "baseUrl": "https://aihubmix.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "aiml",
+    "name": "AI/ML API",
+    "baseUrl": "https://api.aimlapi.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "aleph_alpha",
+    "name": "Aleph Alpha",
+    "baseUrl": "https://api.aleph-alpha.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "apertis",
+    "name": "Apertis",
+    "baseUrl": "https://api.stima.tech/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "chutes",
+    "name": "Chutes AI",
+    "baseUrl": "https://llm.chutes.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "codestral",
+    "name": "Codestral (Mistral)",
+    "baseUrl": "https://codestral.mistral.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "crusoe",
+    "name": "Crusoe",
+    "baseUrl": "https://managed-inference-api-proxy.crusoecloud.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "darkbloom",
+    "name": "Darkbloom",
+    "baseUrl": "https://api.darkbloom.dev/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "empiriolabs",
+    "name": "Empirio Labs",
+    "baseUrl": "https://api.empiriolabs.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "friendliai",
+    "name": "FriendliAI",
+    "baseUrl": "https://inference.friendli.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "galadriel",
+    "name": "Galadriel",
+    "baseUrl": "https://api.galadriel.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "gmi",
+    "name": "GMI Cloud",
+    "baseUrl": "https://api.gmi-serving.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "gradient_ai",
+    "name": "Gradient AI",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.gradient.ai/v1", "secret": false },
+      { "key": "apiKey", "label": "API Key", "secret": true }
+    ]
+  },
+  {
+    "id": "helicone",
+    "name": "Helicone",
+    "baseUrl": "https://ai-gateway.helicone.ai/",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "inception",
+    "name": "Inception Labs",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.inceptionlabs.ai/v1", "secret": false },
+      { "key": "apiKey", "label": "API Key", "secret": true }
+    ]
+  },
+  {
+    "id": "libertai",
+    "name": "LibertAI",
+    "baseUrl": "https://api.libertai.io/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "llamagate",
+    "name": "LlamaGate",
+    "baseUrl": "https://api.llamagate.dev/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "meta",
+    "name": "Meta AI",
+    "baseUrl": "https://api.meta.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "morph",
+    "name": "Morph",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.morph.so/v1", "secret": false },
+      { "key": "apiKey", "label": "API Key", "secret": true }
+    ]
+  },
+  {
+    "id": "nano-gpt",
+    "name": "NanoGPT",
+    "baseUrl": "https://nano-gpt.com/api/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "neosantara",
+    "name": "NeoSantara",
+    "baseUrl": "https://api.neosantara.xyz/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "chinese",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "nlp_cloud",
+    "name": "NLP Cloud",
+    "baseUrl": "https://api.nlpcloud.io/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "nscale",
+    "name": "Nscale",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://inference.nscale.com/v1", "secret": false },
+      { "key": "apiKey", "label": "API Key", "secret": true }
+    ]
+  },
+  {
+    "id": "ovhcloud",
+    "name": "OVH Cloud",
+    "baseUrl": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "parasail",
+    "name": "Parasail",
+    "baseUrl": "https://api.parasail.io/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "pinstripes",
+    "name": "Pinstripes",
+    "baseUrl": "https://pinstripes.io/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "poe",
+    "name": "Poe",
+    "baseUrl": "https://api.poe.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "predibase",
+    "name": "Predibase",
+    "baseUrl": "https://serving.app.predibase.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "publicai",
+    "name": "Public AI",
+    "baseUrl": "https://api.publicai.co/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "sarvam",
+    "name": "Sarvam AI",
+    "baseUrl": "https://api.sarvam.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "scaleway",
+    "name": "Scaleway",
+    "baseUrl": "https://api.scaleway.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "synthetic",
+    "name": "Synthetic AI",
+    "baseUrl": "https://api.synthetic.new/openai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "tensormesh",
+    "name": "TensorMesh",
+    "baseUrl": "https://serverless.tensormesh.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "veniceai",
+    "name": "Venice AI",
+    "baseUrl": "https://api.venice.ai/api/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  },
+  {
+    "id": "xiaomi_mimo",
+    "name": "Xiaomi MiMo",
+    "baseUrl": "https://api.xiaomimimo.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "chinese",
+    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+  }
+]
