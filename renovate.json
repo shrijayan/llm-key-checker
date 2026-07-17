@@ -1,0 +1,63 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "UTC",
+  "schedule": ["before 6am on Monday"],
+  "semanticCommits": "enabled",
+  "dependencyDashboard": true,
+  "minimumReleaseAge": "3 days",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 10,
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "Group all patch updates into one PR and auto-merge",
+      "matchUpdateTypes": ["patch"],
+      "groupName": "all patch updates",
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Auto-merge minor updates after CI passes (wait 5 days for yanked-package safety)",
+      "matchUpdateTypes": ["minor"],
+      "automerge": true,
+      "platformAutomerge": true,
+      "minimumReleaseAge": "5 days"
+    },
+    {
+      "description": "Major updates require manual review",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "major-update"]
+    },
+    {
+      "description": "Next.js is a framework update — always manual review",
+      "matchPackageNames": ["next", "eslint-config-next", "@next/bundle-analyzer"],
+      "groupName": "Next.js",
+      "automerge": false,
+      "labels": ["dependencies", "nextjs"]
+    },
+    {
+      "description": "React core — always manual review",
+      "matchPackageNames": ["react", "react-dom"],
+      "groupName": "React",
+      "automerge": false,
+      "labels": ["dependencies", "react"]
+    },
+    {
+      "description": "TypeScript type definitions — group and auto-merge",
+      "matchPackagePatterns": ["^@types/"],
+      "groupName": "TypeScript type definitions",
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "GitHub Actions workflows — auto-merge patch and minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "GitHub Actions",
+      "automerge": true,
+      "platformAutomerge": true
+    }
+  ]
+}

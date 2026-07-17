@@ -1,0 +1,55 @@
+# Only needed if using Dependabot for npm (not Renovate).
+# Renovate handles auto-merge natively via renovate.json — no workflow needed.
+#
+# How this works:
+# 1. Dependabot opens a PR
+# 2. This workflow runs, checks if update is patch or minor
+# 3. Approves the PR (using github-actions[bot] token — different actor from dependabot[bot])
+# 4. Enables auto-merge — GitHub will merge once CI (ci.yml) passes
+# 5. Major updates are left open for manual review
+
+name: Auto-merge Dependabot PRs
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+# Needs write access to approve and merge
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    name: Auto-merge patch and minor updates
+    runs-on: ubuntu-latest
+    # Only run for Dependabot PRs
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      # Approve the PR — github-actions[bot] is a different actor from dependabot[bot]
+      # so GitHub allows this self-approval pattern
+      - name: Approve patch and minor PRs
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Enable auto-merge: GitHub will merge automatically once CI passes
+      - name: Enable auto-merge for patch and minor PRs
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
