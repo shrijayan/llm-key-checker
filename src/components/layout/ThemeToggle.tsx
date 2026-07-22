@@ -2,23 +2,21 @@
 
 import { useTheme } from 'next-themes'
 import { Sun, Moon } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useHasMounted } from '@/hooks/useHasMounted'
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const hasMounted = useHasMounted()
 
-  useEffect(() => setMounted(true), [])
-
-  if (!mounted) return <div className="w-9 h-9" />
+  if (!hasMounted) return <div className="h-9 w-9" />
 
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+      className="rounded-lg p-2 text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 dark:text-zinc-400 dark:hover:text-zinc-50"
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </button>
   )
 }

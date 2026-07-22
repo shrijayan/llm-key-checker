@@ -5,75 +5,108 @@
 
 /* ── Design tokens ─────────────────────────────────────────────────────────── */
 /*
- * Two neutral scales, deliberately:
- * - "ink"   → the console is a terminal window. Terminals are dark. Always.
- *             It does not flip with the site's light/dark toggle.
- * - "paper" → the page chrome around the console (header, hero, footer)
- *             does flip with the toggle.
+ * Neutral strategy: the site chrome (header, hero, marketing sections,
+ * footer) uses Tailwind's built-in `zinc` scale plus `dark:` variants — the
+ * same pattern every Tailwind site uses, so any contributor already knows it.
+ * We only define custom tokens for things Tailwind doesn't ship:
+ *
+ * - "ink"    → the console is a terminal window. Terminals are dark. Always.
+ *              It does not flip with the site's light/dark toggle — a
+ *              deliberate, defensible choice (real terminal emulators don't
+ *              re-theme with the OS setting either).
+ * - "accent" → the brand hue, used for CTAs, focus rings, links, gradients.
+ * - "gold"   → key/value emphasis, like a string-literal syntax highlight.
+ * - success/error → muted terminal semantics for validation results.
  */
 @theme {
-  /* Ink — console neutrals (fixed dark) */
-  --color-ink-950: #0b0e14;
-  --color-ink-900: #12151d;
-  --color-ink-800: #1b1f2a;
-  --color-ink-700: #262b39;
-  --color-ink-600: #363c4d;
+  /* Ink — console neutrals (fixed dark, never flips with theme) */
+  --color-ink-950: #0a0b0f;
+  --color-ink-900: #101219;
+  --color-ink-800: #191c26;
+  --color-ink-700: #262a38;
+  --color-ink-600: #383d4e;
   --color-ink-400: #6b7280;
   --color-ink-200: #a6acbb;
   --color-ink-100: #d7dae1;
   --color-ink-50: #f1f2f5;
 
-  /* Paper — site-chrome neutrals (light mode) */
-  --color-paper-50: #f7f8fa;
-  --color-paper-100: #edeff3;
-  --color-paper-200: #e1e4ea;
+  /* Accent — indigo-violet brand hue. Distinct from any prior pass. */
+  --color-accent-300: #c3b6ff;
+  --color-accent-400: #9c88fb;
+  --color-accent-500: #7c66f0;
+  --color-accent-600: #6248db;
+  --color-accent-700: #4d38b3;
 
-  /* Accent — desaturated periwinkle. Used for focus, selection, links. */
-  --color-accent-300: #a9c1fa;
-  --color-accent-400: #7aa2f7;
-  --color-accent-500: #5c87e8;
-  --color-accent-600: #4a6fcc;
-
-  /* Gold — key/value emphasis, like string-literal syntax highlighting */
+  /* Gold — masked-secret emphasis, like string-literal syntax highlighting */
   --color-gold-300: #f0c88a;
   --color-gold-400: #e0af68;
 
   /* Success / error — muted terminal semantics, not neon */
   --color-success-400: #9ece6a;
-  --color-success-600: #5c9a3e;
+  --color-success-600: #4b8a2f;
   --color-error-400: #f7768e;
   --color-error-600: #c1435f;
 
   /* Typography */
-  --font-sans: var(--font-ibm-plex-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, 'Courier New', monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'Courier New', monospace;
+
+  /* Motion durations — single source of truth for CSS-driven animation */
+  --duration-aurora: 22s;
+  --duration-marquee: 46s;
 }
 
 /* ── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
+  html {
+    scroll-behavior: auto; /* Lenis owns smooth scrolling; see SmoothScrollProvider */
+    color-scheme: light dark;
+  }
+
   body {
-    @apply bg-paper-50 text-ink-900;
-    @apply dark:bg-ink-950 dark:text-ink-50;
+    @apply bg-white text-zinc-900;
+    @apply dark:bg-[#08090c] dark:text-zinc-50;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* Subtle dot grid — gives empty space texture instead of looking blank */
-    background-image: radial-gradient(circle, rgb(0 0 0 / 0.055) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgb(0 0 0 / 0.05) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .dark body {
-    background-image: radial-gradient(circle, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgb(255 255 255 / 0.05) 1px, transparent 1px);
   }
 
-  @keyframes blink {
-    0%,
-    49% {
-      opacity: 1;
+  ::selection {
+    @apply bg-accent-500/30 text-inherit;
+  }
+
+  /* Respect user motion preferences everywhere, not just our custom utilities */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
     }
-    50%,
-    100% {
-      opacity: 0;
+  }
+
+  /*
+   * Scroll-reveal animations (Reveal.tsx) rely on IntersectionObserver,
+   * which never fires for a page that's rendered all at once instead of
+   * scrolled — e.g. a browser's "Print" / "Save as PDF". Without this,
+   * anything below the first viewport would print blank. Force every
+   * motion value back to its resting state for print specifically.
+   */
+  @media print {
+    * {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
     }
   }
 
@@ -88,19 +121,84 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .animate-blink,
-    .animate-fade-in {
-      animation: none !important;
-    }
+  @keyframes aurora-drift-1 {
+    0%, 100% { transform: translate(-8%, -6%) scale(1); }
+    33% { transform: translate(6%, 4%) scale(1.12); }
+    66% { transform: translate(-4%, 8%) scale(0.95); }
+  }
+
+  @keyframes aurora-drift-2 {
+    0%, 100% { transform: translate(6%, 8%) scale(1); }
+    50% { transform: translate(-10%, -4%) scale(1.15); }
+  }
+
+  @keyframes aurora-drift-3 {
+    0%, 100% { transform: translate(0%, 0%) scale(1); }
+    40% { transform: translate(-6%, -10%) scale(1.08); }
+    75% { transform: translate(8%, 2%) scale(0.94); }
+  }
+
+  @keyframes marquee-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+
+  @keyframes caret-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
   }
 }
 
 /* ── Custom utilities ──────────────────────────────────────────────────────── */
-@utility animate-blink {
-  animation: blink 1s step-end infinite;
+@utility animate-fade-in {
+  animation: fade-in 0.2s ease-out both;
 }
 
-@utility animate-fade-in {
-  animation: fade-in 0.15s ease-out both;
+@utility animate-caret {
+  animation: caret-blink 1s step-end infinite;
+}
+
+@utility animate-aurora-1 {
+  animation: aurora-drift-1 var(--duration-aurora) ease-in-out infinite;
+}
+
+@utility animate-aurora-2 {
+  animation: aurora-drift-2 var(--duration-aurora) ease-in-out infinite;
+  animation-delay: -4s;
+}
+
+@utility animate-aurora-3 {
+  animation: aurora-drift-3 var(--duration-aurora) ease-in-out infinite;
+  animation-delay: -9s;
+}
+
+@utility animate-marquee-left {
+  animation: marquee-left var(--duration-marquee) linear infinite;
+}
+
+@utility animate-marquee-right {
+  animation: marquee-right var(--duration-marquee) linear infinite;
+}
+
+@utility glass-panel {
+  @apply bg-white/70 dark:bg-white/[0.035] backdrop-blur-xl border border-zinc-900/8 dark:border-white/10;
+}
+
+@utility fade-edges-x {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+@utility bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+@utility text-balance-pretty {
+  text-wrap: balance;
 }

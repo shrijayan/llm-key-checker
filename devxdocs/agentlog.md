@@ -137,3 +137,130 @@ true instead of just looking techy.
   in Playwright and screenshot desktop light/dark + mobile + the interactive
   states, rather than reasoning about Tailwind classes in the abstract. Two
   real bugs above were only caught this way — reading the code gave no signal.
+
+---
+
+## 2026-07-22 — Full site rebuild: single tool → scrolling product page
+
+### Why
+User feedback: the v2 console (terminal/curl-preview concept, still good and
+kept) was sitting on a page that otherwise looked "old school" — a static
+block with no motion, no scroll, nothing that felt like a 2026 product site.
+Asked for a complete visual rewamp: fluid, smooth-scrolling, researched
+against current live sites, fully autonomous, no scope limit.
+
+### What was built
+Turned the single-block utility into a full scrolling product page while
+keeping the actual tool (the terminal console) as the centerpiece, not a
+footnote:
+`Header (scroll-aware, Cmd+K) → Hero → Console → Provider marquee →
+How it works → Security bento → Stats band → FAQ → Final CTA → Footer`
+
+**New dependencies:** `motion` (scroll reveals, springs), `lenis` (inertia
+smooth scroll), `cmdk` (accessible command palette), `geist` (Vercel's
+Geist Sans/Mono — replaces IBM Plex Sans/JetBrains Mono site-wide).
+
+**New architecture (all under `src/`):**
+- `components/motion/` — `SmoothScrollProvider` (Lenis + global
+  `MotionConfig reducedMotion="user"`), `Reveal` (shared scroll-reveal
+  wrapper, one easing/duration system for the whole site via
+  `lib/motion/variants.ts`), `AnimatedCounter`, `MagneticButton`,
+  `useScrollToSection` / `useJumpToConsole` (Lenis-aware anchor nav).
+- `components/decor/` — `AuroraBackground` (pure-CSS animated gradient
+  blobs, transform-only so it's compositor-only/cheap), `NoiseOverlay`.
+- `components/sections/` — one file per marketing section (Hero,
+  ConsoleSection, ProviderMarquee, HowItWorks, SecurityBento, StatsBand,
+  Faq, FinalCta), each pulling copy from `lib/content/*.ts` instead of
+  hardcoding strings inline.
+- `components/providers/ProviderSelectionContext.tsx` — lifts "which
+  provider is selected" out of the console so the header's command
+  palette, the provider marquee, and the console itself can all read/write
+  the same selection without prop-drilling.
+- `lib/providers/detectProvider.ts` — the actual friction-reduction
+  feature, not just a reskin: recognizes ~12 providers' key *shapes*
+  (`sk-ant-` → Anthropic, `AIzaSy` → Gemini, `gsk_` → Groq, `AKIA`/`ASIA` →
+  Bedrock's access key field specifically, etc.) and routes a pasted key
+  straight to the right form, pre-filled, zero provider-picking required.
+  Falls back to a helpful message (not a dead end) when a key's shape isn't
+  recognized. The console's search input now doubles as the paste target.
+- `components/providers/CommandPalette.tsx` — Cmd+K/Ctrl+K: jump to any
+  section or select any provider by name, from anywhere on the page.
+
+### Design decisions
+- Tokens: dropped the old `paper-*` custom scale for site chrome in favor
+  of Tailwind's built-in `zinc` + `dark:` variants (one less bespoke thing
+  to maintain — every Tailwind contributor already knows this pattern).
+  Kept `ink-*` as-is (still the console's fixed-dark scale, per the prior
+  entry's reasoning). New `accent` hue (indigo→violet, `#7C66F0`) is
+  deliberately different from both prior passes' colors.
+- Stats/security/FAQ copy is 100% checkable against the actual repo (no
+  invented "rate limited" badge — grepped the codebase first and confirmed
+  it isn't implemented yet, so it isn't claimed).
+- Added the LICENSE file — README already claimed MIT but the file never
+  existed. Small integrity fix while touching trust-related copy.
+- `next lint` no longer exists in this Next.js version (the CLI subcommand
+  was removed). Added `eslint.config.mjs` using `eslint-config-next`'s
+  already-flat-config default export directly; `package.json`'s `lint`
+  script now runs `eslint .`.
+
+### Bugs found via testing (not by reading the code)
+1. **Console picker↔form transition had a ~360ms mandatory delay.** I'd
+   wrapped the provider-picker/key-form switch in
+   `AnimatePresence mode="wait"` for polish. This directly contradicted a
+   design decision already recorded in this log ("no custom animations on
+   the provider list — speed matters for developer tools") and, worse, it
+   was the root cause of a real interaction race: clicking a provider and
+   immediately typing (which is exactly what a fast user — or a Playwright
+   test — does) could land the keystroke while the old view was still
+   exiting, silently losing it. Fixed by dropping `AnimatePresence` there
+   entirely and going back to plain conditional rendering + the
+   lightweight CSS `animate-fade-in` utility. Console interactions are
+   instant again; full test suite went from ~25s to ~11s. The rest of the
+   page (a one-time scroll-reveal, not a repeated action loop) keeps the
+   fuller motion treatment.
+2. **`Reveal`'s `whileInView` never fires for non-scrolled full captures**
+   (Playwright `fullPage` screenshots, and — a real user-facing case —
+   browser Print/Save-as-PDF). IntersectionObserver only fires on real
+   scroll; a renderer that draws the whole page height in one pass without
+   scrolling leaves below-the-fold content stuck at `opacity: 0`. Added a
+   `@media print` override in `globals.css` that forces every motion value
+   back to resting state. (For my own screenshot QA, the fix was simply to
+   script a scroll-through before capturing — same underlying cause.)
+3. `lucide-react` at the installed version ships **no brand/logo icons**
+   (`Github`, etc. were removed, presumably over trademark concerns) —
+   only generic icons remain (`GitFork` and friends). Swapped every
+   `Github` icon usage for `GitFork`.
+4. A `CommandGroup` heading's `uppercase` Tailwind class was applied to the
+   whole group container, and `text-transform` is inherited — every item
+   label under "NAVIGATE"/"PROVIDERS" rendered in caps too. Fixed by
+   scoping the heading-only styles to `[cmdk-group-heading]` specifically
+   via an arbitrary descendant selector.
+5. React 18 Strict Mode's newer `react-hooks/set-state-in-effect` lint
+   rule flags the common `useState(false)` + `useEffect(() => setState(true))`
+   "mounted" pattern (used for hydration-safe client-only rendering, and
+   already present in the pre-existing `ThemeToggle`). Replaced with
+   `useSyncExternalStore(subscribeNever, () => true, () => false)` in a new
+   `src/hooks/useHasMounted.ts` — same intent, no direct `setState` call in
+   an effect body, and it's the one other client-only value (`useIsMac` in
+   `SiteHeader`) needed too.
+
+### Verification performed
+`chrome-devtools` MCP could not attach in this sandbox (Chrome 150's newer
+remote-debugging restriction on the default profile directory, and no OS
+Accessibility permission available to toggle `chrome://inspect`'s in-app
+remote-debugging switch programmatically). Used Playwright directly
+instead (already a project dependency): full `tsc --noEmit` + `eslint .` +
+`next build` all clean; full Playwright suite (12 tests, including new
+coverage for paste-detection and the command palette) green on repeated
+runs, both parallel and `--workers=1`; manual screenshot sweep of desktop
+light/dark, mobile, and every interactive state against the **production**
+build (`next build && next start`, not just `next dev`) — zero console/page
+errors throughout.
+
+### Next steps (optional future improvements)
+- Real provider logos/icons (still text-only chips — noted as a gap since
+  the very first entry in this log; still true).
+- A `NEXT_PUBLIC_APP_URL`-driven `metadataBase` instead of the hardcoded
+  placeholder domain in `layout.tsx`, once a real production domain exists.
+- Rate limiting on `/api/validate` (referenced as *not yet done* in the new
+  security copy — keep that copy honest if this gets built).
