@@ -264,3 +264,46 @@ errors throughout.
   placeholder domain in `layout.tsx`, once a real production domain exists.
 - Rate limiting on `/api/validate` (referenced as *not yet done* in the new
   security copy — keep that copy honest if this gets built).
+
+---
+
+## 2026-07-22 — "Nothing works" when shared via a random local port
+
+### What happened
+Asked to spin the app up on a random port and share the link. First attempt
+used `next dev -p <port>`. User reported "nothing works." Dev server log
+showed why:
+```
+⚠ Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr
+  from "192.168.42.3". Cross-origin access to Next.js dev resources is
+  blocked by default for safety.
+```
+`next dev`'s dev-only resources (HMR websocket, etc.) refuse cross-origin
+requests unless the origin is added to `allowedDevOrigins` in
+`next.config.ts` — and accessing via the LAN IP (rather than `localhost`)
+counts as cross-origin. Right lesson: a dev server was the wrong tool for
+"here's a link to click," full stop — production doesn't have this whole
+class of restriction (no HMR to block).
+
+### Fix
+Serve `next build && next start -p <port>` instead for any "give me a
+link" request going forward. Verified with Playwright against **both**
+`localhost` and the LAN IP: page loads, zero console/request errors,
+provider-pick + type-into-field interactivity confirmed on both origins.
+
+### Also found while verifying (unrelated, fixed anyway)
+A raw `locator.click()` on an off-screen element (Playwright's own
+actionability auto-scroll, not a real user gesture) could land the target
+just outside `Reveal`'s `-10%/-10%` viewport margin, leaving it stuck at
+`opacity: 0` despite being interactive. Confirmed the actual real-user
+paths were already fine (gradual scroll, Lenis-animated smooth-scroll from
+the CTA, and direct `#section` anchor-link navigation on load all check
+out at `opacity: 1`) — but softened the margin to `0px 0px -5% 0px` anyway
+(shrink only the bottom edge, only slightly) since it costs nothing and
+removes a theoretical failure mode. See `src/components/motion/Reveal.tsx`.
+
+### Lesson for next time
+When asked to "spin up and give me a link" (as opposed to "start the dev
+server"), default to a production build. Dev mode's HMR/cross-origin
+protections are correct behavior for local development but will look like
+a completely broken app to anyone who isn't `localhost`.
