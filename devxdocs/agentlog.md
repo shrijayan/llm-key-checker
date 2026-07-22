@@ -307,3 +307,93 @@ When asked to "spin up and give me a link" (as opposed to "start the dev
 server"), default to a production build. Dev mode's HMR/cross-origin
 protections are correct behavior for local development but will look like
 a completely broken app to anyone who isn't `localhost`.
+
+---
+
+## 2026-07-22 — Full SEO pass
+
+### What was built
+Went through technical SEO end to end rather than just adding a couple of
+meta tags. Everything is generated through Next.js's file-based metadata
+conventions (no hand-written static assets to drift out of sync):
+
+- `src/lib/seo/config.ts` (NEW) — single source of truth for site URL/name/
+  description/keywords. `SITE_URL` reads `NEXT_PUBLIC_SITE_URL` with a
+  working placeholder fallback, replacing the value that used to be
+  hardcoded directly in `layout.tsx` (this closes the "next steps" item
+  from two entries up in this log).
+- `src/app/layout.tsx` — full `Metadata`: title template, canonical
+  (`alternates.canonical`), explicit `robots`/`googleBot` directives
+  (`max-snippet:-1`, `max-image-preview:large`), complete Open Graph +
+  Twitter Card fields, `verification.google` wired to an env var that's
+  simply omitted (not faked) when unset.
+- `src/app/robots.ts`, `sitemap.ts`, `manifest.ts` (NEW) — Next's
+  file-convention equivalents of robots.txt/sitemap.xml/manifest.webmanifest.
+  `/api/` is disallowed in robots.txt *and* gets `X-Robots-Tag: noindex`
+  from `next.config.ts` — belt and suspenders, since it's a POST-only JSON
+  endpoint with nothing worth indexing either way.
+- `src/app/icon.tsx`, `apple-icon.tsx`, `opengraph-image.tsx`,
+  `twitter-image.tsx` (NEW) — generated via `next/og`'s `ImageResponse`
+  instead of hand-exported PNGs, built from the exact same KeyRound SVG
+  path already used as the header wordmark and the same live provider
+  count used everywhere else. All four are prerendered at build time
+  (confirmed `○ Static` in the build output), so none of this costs a
+  real visitor anything at request time.
+- `src/lib/seo/structuredData.ts` + `src/components/seo/JsonLd.tsx` (NEW) —
+  one JSON-LD `@graph` (WebSite, Organization, SoftwareApplication,
+  FAQPage) injected once in the root layout. The FAQPage entries are built
+  directly from `FAQ_ITEMS` — same array the visible accordion renders
+  from — so the structured data can never drift from what's actually on
+  the page. Deliberately **no** `aggregateRating`/`review` on the
+  SoftwareApplication node: Google requires one of those two for the
+  "Software App" star-rating rich result, and there's no real rating data
+  to back one — inventing one would be exactly the kind of fabricated
+  claim this project has avoided everywhere else. Still fully valid
+  structured data without it, just not eligible for that one rich result.
+- `src/components/motion/ScrollLink.tsx` (NEW) — every piece of in-page
+  navigation (header nav, footer nav, both "Check a key" CTAs, the hero's
+  scroll-down hint) now renders as a real `<a href="#section">` instead of
+  a `<button onClick>`. The Lenis-smoothed scroll is layered on as
+  `onClick` + `preventDefault` (skipped for modified clicks — cmd/ctrl/
+  shift/alt-click still opens normally), so it's a progressive enhancement
+  over a link that already works with JS disabled, is followable by
+  crawlers, and behaves like a normal link (open in new tab, copy link).
+
+### Bugs found via testing (not by reading the code)
+1. **`AnimatedCounter` rendered "0" as its actual initial state**, animating
+   up to the real value only after mount + scroll-into-view. That "0" is
+   exactly what a crawler (or anyone with JS disabled) would see as the
+   permanent text content — confirmed by curling the server-rendered HTML
+   and finding "Works with 0+ providers" verbatim. Fixed by initializing
+   `useState(value)` instead of `useState(0)`: the server-rendered and
+   first-client-paint output is now always the correct number, and the
+   count-up-from-zero animation is purely a client-side effect layered on
+   top after that, triggered by scroll — never the only source of the real
+   value. Also softened its viewport margin the same way `Reveal.tsx` was
+   softened last entry, for the same reason.
+2. `eslint-config-next`'s flat config default export already includes a
+   Next.js-recommended `ignores` block; nothing extra needed there, but
+   worth confirming `eslint.config.mjs` didn't need updating for the new
+   `app/*.ts`/`app/*.tsx` metadata-route files — it didn't, they're just
+   normal TypeScript/TSX to the linter.
+
+### Verified
+`tsc --noEmit`, `eslint .`, and `next build` all clean. Full Playwright
+suite (20 tests now — added a `describe('SEO')` block covering
+robots.txt/sitemap.xml/manifest content, the API route's `X-Robots-Tag`,
+single-`<h1>` + canonical/OG/Twitter/icon tag presence, JSON-LD validity
+*and* that its FAQ content is actually visible on the page, real `href`
+attributes on primary nav, and a regression guard for the "0" bug above)
+green on repeated runs, parallel and `--workers=1`. Manually curled and
+diffed the actual production `<head>` output and JSON-LD payload against
+Google's documented requirements for each type; downloaded and visually
+inspected the generated icon/apple-icon/OG image PNGs at their exact
+target dimensions (512×512, 180×180, 1200×630).
+
+### Next steps (optional future improvements)
+- Set `NEXT_PUBLIC_SITE_URL` and `GOOGLE_SITE_VERIFICATION` for real once
+  this has an actual production domain and a Search Console property.
+- Real provider logos/icons — same still-open gap noted since the first
+  entry in this log.
+- Rate limiting on `/api/validate` — still not implemented; keep the
+  security copy honest if this changes.

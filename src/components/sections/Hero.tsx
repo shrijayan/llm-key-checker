@@ -7,14 +7,13 @@ import { GITHUB_REPO_URL } from '@/lib/content/navigation'
 import { SECTION_ID } from '@/lib/content/sections'
 import { AuroraBackground } from '@/components/decor/AuroraBackground'
 import { MagneticButton } from '@/components/motion/MagneticButton'
+import { ScrollLink } from '@/components/motion/ScrollLink'
 import { useJumpToConsole } from '@/components/motion/useJumpToConsole'
-import { useScrollToSection } from '@/components/motion/useScrollToSection'
 import { EASE_OUT } from '@/lib/motion/variants'
 import { TrustBadge } from '@/components/TrustBadge'
 
 export function Hero() {
   const jumpToConsole = useJumpToConsole()
-  const scrollToSection = useScrollToSection()
   const providerCount = ALL_PROVIDERS.length
 
   return (
@@ -67,13 +66,13 @@ export function Hero() {
         className="mt-9 flex flex-col items-center gap-4 sm:flex-row"
       >
         <MagneticButton>
-          <button
-            type="button"
-            onClick={jumpToConsole}
-            className="rounded-xl bg-accent-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/25 transition-colors hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+          <ScrollLink
+            sectionId={SECTION_ID.console}
+            onActivate={jumpToConsole}
+            className="block rounded-xl bg-accent-500 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/25 transition-colors hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
           >
             Check a key
-          </button>
+          </ScrollLink>
         </MagneticButton>
 
         <MagneticButton>
@@ -98,9 +97,8 @@ export function Hero() {
         <TrustBadge />
       </motion.div>
 
-      <button
-        type="button"
-        onClick={() => scrollToSection(SECTION_ID.console)}
+      <ScrollLink
+        sectionId={SECTION_ID.console}
         aria-label="Scroll to the console"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 text-zinc-400 transition-colors hover:text-zinc-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 rounded-full dark:text-zinc-600 dark:hover:text-zinc-300"
       >
@@ -111,7 +109,7 @@ export function Hero() {
         >
           <ArrowDown className="h-5 w-5" />
         </motion.span>
-      </button>
+      </ScrollLink>
     </section>
   )
 }

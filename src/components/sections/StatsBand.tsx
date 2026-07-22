@@ -23,6 +23,7 @@ export function StatsBand() {
 
   return (
     <section className="relative border-y border-zinc-900/8 bg-zinc-50/60 py-16 dark:border-white/10 dark:bg-white/[0.02]">
+      <h2 className="sr-only">Key facts</h2>
       <div className="mx-auto grid max-w-5xl grid-cols-2 gap-8 px-4 sm:grid-cols-4">
         {stats.map((stat, index) => (
           <Reveal key={stat.label} index={index} variant="scaleIn">

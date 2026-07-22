@@ -1,10 +1,11 @@
 'use client'
 
-import { motion } from 'motion/react'
 import { AuroraBackground } from '@/components/decor/AuroraBackground'
 import { MagneticButton } from '@/components/motion/MagneticButton'
 import { Reveal } from '@/components/motion/Reveal'
+import { ScrollLink } from '@/components/motion/ScrollLink'
 import { useJumpToConsole } from '@/components/motion/useJumpToConsole'
+import { SECTION_ID } from '@/lib/content/sections'
 
 export function FinalCta() {
   const jumpToConsole = useJumpToConsole()
@@ -22,15 +23,13 @@ export function FinalCta() {
         </p>
 
         <MagneticButton className="mt-8">
-          <motion.button
-            type="button"
-            onClick={jumpToConsole}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/25 transition-colors hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+          <ScrollLink
+            sectionId={SECTION_ID.console}
+            onActivate={jumpToConsole}
+            className="block rounded-xl bg-accent-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent-500/25 transition-all hover:scale-[1.02] hover:bg-accent-600 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
           >
             Check a key now
-          </motion.button>
+          </ScrollLink>
         </MagneticButton>
       </Reveal>
     </section>

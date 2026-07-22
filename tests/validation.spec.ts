@@ -106,3 +106,95 @@ test.describe('LLM Key Checker', () => {
     await expect(firstEntry).toHaveAttribute('open', '')
   })
 })
+
+test.describe('SEO', () => {
+  test('robots.txt allows crawling and points at the sitemap', async ({ request }) => {
+    const response = await request.get('/robots.txt')
+    expect(response.ok()).toBeTruthy()
+    const body = await response.text()
+    expect(body).toContain('Allow: /')
+    expect(body).toContain('Disallow: /api/')
+    expect(body).toMatch(/Sitemap:\s*https?:\/\/\S+\/sitemap\.xml/)
+  })
+
+  test('sitemap.xml is valid and lists the homepage', async ({ request }) => {
+    const response = await request.get('/sitemap.xml')
+    expect(response.ok()).toBeTruthy()
+    expect(response.headers()['content-type']).toContain('xml')
+    const body = await response.text()
+    expect(body).toContain('<urlset')
+    expect(body).toContain('<loc>')
+  })
+
+  test('manifest.webmanifest is valid JSON with required PWA fields', async ({ request }) => {
+    const response = await request.get('/manifest.webmanifest')
+    expect(response.ok()).toBeTruthy()
+    const manifest = await response.json()
+    expect(manifest.name).toBeTruthy()
+    expect(manifest.icons?.length).toBeGreaterThan(0)
+  })
+
+  test('the API route is excluded from indexing', async ({ request }) => {
+    const response = await request.post('/api/validate', { data: {} })
+    expect(response.headers()['x-robots-tag']).toContain('noindex')
+  })
+
+  test('homepage has exactly one h1 and a complete metadata set', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    await expect(page.locator('h1')).toHaveCount(1)
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /.+/)
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/)
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /opengraph-image/)
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      'content',
+      'summary_large_image'
+    )
+    await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', /.+/)
+  })
+
+  test('JSON-LD structured data is present and describes the FAQ + software app', async ({
+    page,
+  }) => {
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    const jsonLd = await page.locator('script[type="application/ld+json"]').innerText()
+    const parsed = JSON.parse(jsonLd)
+    const types = parsed['@graph'].map((node: { '@type': string }) => node['@type'])
+
+    expect(types).toEqual(
+      expect.arrayContaining(['WebSite', 'Organization', 'SoftwareApplication', 'FAQPage'])
+    )
+
+    const faqNode = parsed['@graph'].find(
+      (node: { '@type': string }) => node['@type'] === 'FAQPage'
+    )
+    expect(faqNode.mainEntity.length).toBeGreaterThan(0)
+    // The structured data must mirror what's actually visible, not invented copy.
+    await expect(page.getByText(faqNode.mainEntity[0].name)).toBeVisible()
+  })
+
+  test('primary navigation renders as real, crawlable anchor links', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'networkidle' })
+
+    const nav = page.locator('header nav')
+    const links = nav.getByRole('link')
+    await expect(links).toHaveCount(5)
+
+    const firstHref = await links.first().getAttribute('href')
+    expect(firstHref).toMatch(/^#/)
+  })
+
+  test('stats band shows real numbers, not zeroed placeholders, without scrolling', async ({
+    page,
+  }) => {
+    // Regression check: AnimatedCounter must render its final value on the
+    // very first paint (server-rendered, pre-hydration) — a crawler or a
+    // no-JS visitor never triggers the count-up animation that used to be
+    // the only thing setting the real number.
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
+    const html = await page.content()
+    expect(html).toContain('LLM providers supported')
+    expect(html).not.toMatch(/<span>0<!-- -->\+<\/span>/)
+  })
+})

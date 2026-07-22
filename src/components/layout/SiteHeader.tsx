@@ -6,9 +6,9 @@ import { motion } from 'motion/react'
 import { ALL_PROVIDERS } from '@/lib/providers/registry'
 import { NAV_LINKS, GITHUB_REPO_URL } from '@/lib/content/navigation'
 import { SECTION_ID } from '@/lib/content/sections'
-import { useScrollToSection } from '@/components/motion/useScrollToSection'
 import { useJumpToConsole } from '@/components/motion/useJumpToConsole'
 import { MagneticButton } from '@/components/motion/MagneticButton'
+import { ScrollLink } from '@/components/motion/ScrollLink'
 import { CommandPalette, useCommandPaletteShortcut } from '@/components/providers/CommandPalette'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -17,7 +17,6 @@ const SCROLL_THRESHOLD_PX = 24
 
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const scrollToSection = useScrollToSection()
   const jumpToConsole = useJumpToConsole()
   const { open, setOpen } = useCommandPaletteShortcut()
   const isMac = useIsMac()
@@ -46,9 +45,8 @@ export function SiteHeader() {
                 : 'border-transparent bg-transparent',
             ].join(' ')}
           >
-            <button
-              type="button"
-              onClick={() => scrollToSection(SECTION_ID.hero)}
+            <ScrollLink
+              sectionId={SECTION_ID.hero}
               className="flex items-center gap-1.5 rounded-lg text-sm font-semibold text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 dark:text-zinc-50"
             >
               <KeyRound className="h-4 w-4 text-accent-500 dark:text-accent-400" />
@@ -56,18 +54,17 @@ export function SiteHeader() {
               <span className="font-mono text-xs font-normal text-zinc-400 dark:text-zinc-500">
                 /{ALL_PROVIDERS.length}
               </span>
-            </button>
+            </ScrollLink>
 
-            <nav className="hidden items-center gap-6 lg:flex">
+            <nav className="hidden items-center gap-6 lg:flex" aria-label="Section">
               {NAV_LINKS.map((link) => (
-                <button
+                <ScrollLink
                   key={link.sectionId}
-                  type="button"
-                  onClick={() => scrollToSection(link.sectionId)}
+                  sectionId={link.sectionId}
                   className="text-sm text-zinc-500 transition-colors hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 rounded dark:text-zinc-400 dark:hover:text-zinc-50"
                 >
                   {link.label}
-                </button>
+                </ScrollLink>
               ))}
             </nav>
 
@@ -95,13 +92,13 @@ export function SiteHeader() {
               <ThemeToggle />
 
               <MagneticButton className="ml-1">
-                <button
-                  type="button"
-                  onClick={jumpToConsole}
-                  className="rounded-lg bg-accent-500 px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+                <ScrollLink
+                  sectionId={SECTION_ID.console}
+                  onActivate={jumpToConsole}
+                  className="block rounded-lg bg-accent-500 px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
                 >
                   Check a key
-                </button>
+                </ScrollLink>
               </MagneticButton>
             </div>
           </motion.div>
