@@ -515,6 +515,26 @@
     ]
   },
   {
+    "id": "nimble",
+    "name": "Nimble",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "nlp_cloud",
     "name": "NLP Cloud",
     "baseUrl": "https://api.nlpcloud.io/v1",
