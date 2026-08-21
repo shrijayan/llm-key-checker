@@ -15,6 +15,26 @@
     ]
   },
   {
+    "id": "agentcore",
+    "name": "Agentcore",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "aihubmix",
     "name": "AI Hub Mix",
     "baseUrl": "https://aihubmix.com/v1",
@@ -163,6 +183,21 @@
     "id": "codestral",
     "name": "Codestral (Mistral)",
     "baseUrl": "https://codestral.mistral.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "cognition",
+    "name": "Cognition",
+    "baseUrl": "https://api.cognition.ai/v1",
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
