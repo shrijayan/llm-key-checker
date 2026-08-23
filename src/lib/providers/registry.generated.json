@@ -765,6 +765,21 @@
     ]
   },
   {
+    "id": "scx-ai",
+    "name": "Scx Ai",
+    "baseUrl": "https://api.scx.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "synthetic",
     "name": "Synthetic AI",
     "baseUrl": "https://api.synthetic.new/openai/v1",
