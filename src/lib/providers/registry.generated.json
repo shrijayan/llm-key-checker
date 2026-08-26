@@ -150,6 +150,26 @@
     ]
   },
   {
+    "id": "bing_grounding",
+    "name": "Bing Grounding",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "charity_engine",
     "name": "Charity Engine",
     "baseUrl": "https://api.charityengine.services/remotejobs/v2/inference",
