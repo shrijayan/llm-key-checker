@@ -9,29 +9,47 @@ import type { Provider } from './types'
  * always `apiKey`, except AWS where the recognizable prefix (`AKIA`/`ASIA`)
  * identifies the *access key id*, not the secret.
  *
- * This is intentionally a small, honest list. Not every provider has a
- * distinctive enough key format to guess from — that's fine. When nothing
- * matches, the caller falls back to normal search, which is still correct,
- * just not automatic.
+ * `unique` means the shape is distinctive enough to auto-select *and*
+ * auto-run a check on paste. Bare `sk-` is not unique — DeepSeek, Moonshot,
+ * and others issue the same prefix.
  */
-const KEY_SIGNATURES: ReadonlyArray<{ pattern: RegExp; providerId: string; fieldKey: string }> = [
-  { pattern: /^sk-ant-/, providerId: 'anthropic', fieldKey: 'apiKey' },
-  { pattern: /^sk-or-/, providerId: 'openrouter', fieldKey: 'apiKey' },
-  { pattern: /^sk-proj-/, providerId: 'openai', fieldKey: 'apiKey' },
-  { pattern: /^sk-svcacct-/, providerId: 'openai', fieldKey: 'apiKey' },
-  { pattern: /^gsk_/, providerId: 'groq', fieldKey: 'apiKey' },
-  { pattern: /^xai-/, providerId: 'xai', fieldKey: 'apiKey' },
-  { pattern: /^pplx-/, providerId: 'perplexity', fieldKey: 'apiKey' },
-  { pattern: /^hf_/, providerId: 'huggingface', fieldKey: 'apiKey' },
-  { pattern: /^nvapi-/, providerId: 'nvidia_nim', fieldKey: 'apiKey' },
-  { pattern: /^fw_/, providerId: 'fireworks_ai', fieldKey: 'apiKey' },
-  { pattern: /^AIzaSy/, providerId: 'gemini', fieldKey: 'apiKey' },
-  { pattern: /^(AKIA|ASIA)/, providerId: 'bedrock', fieldKey: 'accessKeyId' },
+interface KeySignature {
+  pattern: RegExp
+  providerId: string
+  fieldKey: string
+  unique: boolean
+}
+
+const KEY_SIGNATURES: readonly KeySignature[] = [
+  { pattern: /^sk-ant-/, providerId: 'anthropic', fieldKey: 'apiKey', unique: true },
+  { pattern: /^sk-or-/, providerId: 'openrouter', fieldKey: 'apiKey', unique: true },
+  { pattern: /^sk-proj-/, providerId: 'openai', fieldKey: 'apiKey', unique: true },
+  { pattern: /^sk-svcacct-/, providerId: 'openai', fieldKey: 'apiKey', unique: true },
+  { pattern: /^gsk_/, providerId: 'groq', fieldKey: 'apiKey', unique: true },
+  { pattern: /^xai-/, providerId: 'xai', fieldKey: 'apiKey', unique: true },
+  { pattern: /^pplx-/, providerId: 'perplexity', fieldKey: 'apiKey', unique: true },
+  { pattern: /^hf_/, providerId: 'huggingface', fieldKey: 'apiKey', unique: true },
+  { pattern: /^nvapi-/, providerId: 'nvidia_nim', fieldKey: 'apiKey', unique: true },
+  { pattern: /^fw_/, providerId: 'fireworks_ai', fieldKey: 'apiKey', unique: true },
+  { pattern: /^csk[-_]/, providerId: 'cerebras', fieldKey: 'apiKey', unique: true },
+  { pattern: /^AIzaSy/, providerId: 'gemini', fieldKey: 'apiKey', unique: true },
+  { pattern: /^(AKIA|ASIA)/, providerId: 'bedrock', fieldKey: 'accessKeyId', unique: true },
   // Zhipu/GLM keys are a composite `{id}.{secret}` — one dot, no whitespace.
-  { pattern: /^[\w-]{8,}\.[\w-]{8,}$/, providerId: 'zai', fieldKey: 'apiKey' },
-  // Bare `sk-...` (no more specific prefix above matched) means OpenAI.
-  { pattern: /^sk-/, providerId: 'openai', fieldKey: 'apiKey' },
+  { pattern: /^[\w-]{8,}\.[\w-]{8,}$/, providerId: 'zai', fieldKey: 'apiKey', unique: true },
+  // Bare `sk-...` (no more specific prefix above matched) is OpenAI-shaped,
+  // but several other providers issue the same prefix.
+  { pattern: /^sk-/, providerId: 'openai', fieldKey: 'apiKey', unique: false },
 ]
+
+/** Providers known to issue OpenAI-style `sk-` keys (not `sk-ant-` / `sk-or-` / …). */
+export const SK_STYLE_PROVIDER_IDS = [
+  'openai',
+  'deepseek',
+  'moonshot',
+  'together_ai',
+  'minimax',
+  'stepfun',
+] as const
 
 /** Below this length we can't tell a real secret from someone typing a provider's name. */
 const MIN_KEY_LENGTH = 20
@@ -50,6 +68,15 @@ export interface DetectedProvider {
   rawValue: string
   /** Which form field `rawValue` belongs in (usually `apiKey`). */
   fieldKey: string
+  /** Distinctive enough to auto-run a check without asking. */
+  unique: boolean
+}
+
+function matchSignature(value: string): KeySignature | null {
+  for (const signature of KEY_SIGNATURES) {
+    if (signature.pattern.test(value)) return signature
+  }
+  return null
 }
 
 /**
@@ -64,13 +91,35 @@ export function detectProviderFromKey(
   const value = input.trim()
   if (!looksLikeApiKey(value)) return null
 
-  const providerById = new Map(providers.map((p) => [p.id, p]))
+  const signature = matchSignature(value)
+  if (!signature) return null
 
-  for (const { pattern, providerId, fieldKey } of KEY_SIGNATURES) {
-    if (!pattern.test(value)) continue
-    const provider = providerById.get(providerId)
-    if (provider) return { provider, rawValue: value, fieldKey }
+  const provider = providers.find((item) => item.id === signature.providerId)
+  if (!provider) return null
+
+  return {
+    provider,
+    rawValue: value,
+    fieldKey: signature.fieldKey,
+    unique: signature.unique,
   }
+}
 
-  return null
+/** Bare `sk-` keys that several providers share — don't auto-check these. */
+export function isGenericSkKey(input: string): boolean {
+  const value = input.trim()
+  const signature = matchSignature(value)
+  return signature?.providerId === 'openai' && signature.unique === false
+}
+
+export function getSkStyleProviders(providers: Provider[]): Provider[] {
+  const byId = new Map(providers.map((provider) => [provider.id, provider]))
+  return SK_STYLE_PROVIDER_IDS.map((id) => byId.get(id)).filter(
+    (provider): provider is Provider => provider !== undefined
+  )
+}
+
+/** First secret field, else the first field — where a pasted key should land. */
+export function getPrefillFieldKey(provider: Provider): string {
+  return provider.fields.find((field) => field.secret)?.key ?? provider.fields[0]?.key ?? 'apiKey'
 }

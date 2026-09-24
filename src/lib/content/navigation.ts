@@ -7,7 +7,7 @@ export interface NavLink {
 
 /** Primary in-page navigation, shown in the header and reused in the footer. */
 export const NAV_LINKS: NavLink[] = [
-  { label: 'Console', sectionId: SECTION_ID.console },
+  { label: 'Check', sectionId: SECTION_ID.console },
   { label: 'Providers', sectionId: SECTION_ID.providers },
   { label: 'How it works', sectionId: SECTION_ID.howItWorks },
   { label: 'Security', sectionId: SECTION_ID.security },

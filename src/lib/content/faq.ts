@@ -22,7 +22,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'How does the "paste to detect" feature work?',
     answer:
-      'Well-known providers issue keys with a recognizable shape — Anthropic keys start with sk-ant-, Gemini keys with AIzaSy, Groq with gsk_, and so on. We match that shape client-side and select the provider for you. If we don\u2019t recognize the pattern, nothing bad happens — you just pick the provider yourself from the list.',
+      'Well-known providers issue keys with a recognizable shape — Anthropic keys start with sk-ant-, Gemini keys with AIzaSy, Groq with gsk_, and so on. We match that shape in your browser, select the provider, and when the prefix is unique we run the check immediately. Bare sk- keys are used by more than one provider, so we guess OpenAI and let you switch. If we don\u2019t recognize the pattern, pick a provider from the list — the key stays filled in.',
   },
   {
     question: 'What exactly counts as "valid"?',

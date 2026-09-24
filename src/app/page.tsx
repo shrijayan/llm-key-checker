@@ -1,7 +1,6 @@
 import { SiteHeader } from '@/components/layout/SiteHeader'
 import { SiteFooter } from '@/components/layout/SiteFooter'
 import { Hero } from '@/components/sections/Hero'
-import { ConsoleSection } from '@/components/sections/ConsoleSection'
 import { ProviderMarquee } from '@/components/sections/ProviderMarquee'
 import { HowItWorks } from '@/components/sections/HowItWorks'
 import { SecurityBento } from '@/components/sections/SecurityBento'
@@ -21,7 +20,6 @@ export default function Home() {
 
         <main>
           <Hero />
-          <ConsoleSection />
           <ProviderMarquee providers={ALL_PROVIDERS} />
           <HowItWorks />
           <SecurityBento />

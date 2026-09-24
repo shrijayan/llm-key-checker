@@ -1,9 +1,16 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Eye, EyeOff, CornerDownLeft, Loader2 } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
+import { ChevronDown, Eye, EyeOff, Loader2 } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
 import type { Provider, ValidationResult } from '@/lib/providers/types'
+import { ALL_PROVIDERS } from '@/lib/providers/registry'
+import {
+  detectProviderFromKey,
+  getPrefillFieldKey,
+  isGenericSkKey,
+  SK_STYLE_PROVIDER_IDS,
+} from '@/lib/providers/detectProvider'
 import { getRequestPreview } from '@/lib/providers/requestPreview'
 import { useProviderSelection } from './ProviderSelectionContext'
 import { ValidationResult as ValidationResultDisplay } from './ValidationResult'
@@ -13,15 +20,21 @@ interface Props {
 }
 
 export function KeyForm({ provider }: Props) {
-  const { prefill } = useProviderSelection()
+  const {
+    prefill,
+    autoCheck,
+    consumeAutoCheck,
+    selectProvider,
+    changeProvider,
+    clearSelection,
+    setDraftKey,
+  } = useProviderSelection()
 
   const [credentials, setCredentials] = useState<Record<string, string>>(() => {
     const defaults: Record<string, string> = {}
     for (const field of provider.fields) {
       if (field.default) defaults[field.key] = field.default
     }
-    // A key detected from a paste (e.g. sk-ant-...) is seeded into its field
-    // so the user never has to paste it a second time.
     if (prefill) defaults[prefill.fieldKey] = prefill.value
     return defaults
   })
@@ -29,17 +42,21 @@ export function KeyForm({ provider }: Props) {
   const [isLoading, setIsLoading] = useState(false)
   const [result, setResult] = useState<ValidationResult | null>(null)
   const firstFieldRef = useRef<HTMLInputElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const didAutoCheck = useRef(false)
 
-  // Focus the most relevant field the moment this form appears — the
-  // pre-filled one if a key was auto-detected, otherwise the first field.
-  // `preventScroll` keeps this from fighting the in-flight Lenis scroll that
-  // usually brought the console into view a moment earlier.
   useEffect(() => {
     firstFieldRef.current?.focus({ preventScroll: true })
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  useEffect(() => {
+    if (!autoCheck || didAutoCheck.current) return
+    didAutoCheck.current = true
+    consumeAutoCheck()
+    formRef.current?.requestSubmit()
+  }, [autoCheck, consumeAutoCheck])
+
+  const runCheck = async () => {
     setIsLoading(true)
     setResult(null)
 
@@ -58,41 +75,68 @@ export function KeyForm({ provider }: Props) {
     }
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await runCheck()
+  }
+
+  const secretFieldKey = getPrefillFieldKey(provider)
+  const currentSecret = credentials[secretFieldKey] ?? ''
+
+  useEffect(() => {
+    setDraftKey(currentSecret || null)
+  }, [currentSecret, setDraftKey])
+
+  const retargetIfDetected = (fieldKey: string, value: string) => {
+    if (fieldKey !== secretFieldKey) return
+    const detected = detectProviderFromKey(value, ALL_PROVIDERS)
+    if (!detected || detected.provider.id === provider.id) return
+    // Don't steal a generic sk- key away from another sk-style provider the user already picked.
+    if (
+      isGenericSkKey(value) &&
+      (SK_STYLE_PROVIDER_IDS as readonly string[]).includes(provider.id)
+    ) {
+      return
+    }
+    selectProvider(detected.provider, {
+      prefill: { fieldKey: detected.fieldKey, value: detected.rawValue },
+      source: 'auto',
+      autoCheck: detected.unique,
+    })
+  }
+
   const toggleSecret = (key: string) =>
     setShowSecrets((prev) => ({ ...prev, [key]: !prev[key] }))
 
-  // Live-updates as credentials change — this is the real request the validator sends.
   const preview = getRequestPreview(provider, credentials)
   const focusFieldKey = prefill ? prefill.fieldKey : provider.fields[0]?.key
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (result && !isLoading) {
+      resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+  }, [result, isLoading])
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* curl -v convention: '>' prefixes outgoing request lines */}
-      <div className="rounded-lg bg-ink-900 border border-ink-700 px-3.5 py-3 font-mono text-[11px] sm:text-xs leading-relaxed overflow-x-auto">
-        <div className="text-ink-100 whitespace-nowrap">&gt; {preview.requestLine}</div>
-        <div className="text-ink-400 whitespace-nowrap">&gt; {preview.hostLine}</div>
-        {preview.authLines.map((line) => (
-          <div key={line} className="text-gold-400 whitespace-nowrap">
-            &gt; {line}
-          </div>
-        ))}
-      </div>
-
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       {provider.fields.map((field) => {
         const inputId = `${provider.id}-${field.key}`
         return (
           <div key={field.key}>
             <label
               htmlFor={inputId}
-              className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-ink-400 mb-1.5"
+              className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-zinc-700 dark:text-zinc-200"
             >
               {field.label}
               {field.required === false && (
-                <span className="normal-case text-ink-600">(optional)</span>
+                <span className="text-xs font-normal text-zinc-400">(optional)</span>
               )}
             </label>
 
-            {field.hint && <p className="text-xs text-ink-400 mb-1.5">{field.hint}</p>}
+            {field.hint && (
+              <p className="mb-1.5 text-xs text-zinc-500 dark:text-zinc-400">{field.hint}</p>
+            )}
 
             <div className="relative">
               <input
@@ -100,16 +144,24 @@ export function KeyForm({ provider }: Props) {
                 ref={field.key === focusFieldKey ? firstFieldRef : undefined}
                 type={field.secret && !showSecrets[field.key] ? 'password' : 'text'}
                 value={credentials[field.key] ?? ''}
-                onChange={(e) =>
-                  setCredentials((prev) => ({ ...prev, [field.key]: e.target.value }))
-                }
+                onChange={(e) => {
+                  const value = e.target.value
+                  setCredentials((prev) => ({ ...prev, [field.key]: value }))
+                  setResult(null)
+                  retargetIfDetected(field.key, value)
+                }}
                 placeholder={field.placeholder ?? ''}
                 required={field.required !== false}
+                autoComplete="off"
+                spellCheck={false}
                 className={[
-                  'w-full px-3 py-2.5 text-sm font-mono rounded-md border outline-none transition-colors',
-                  'bg-ink-800 border-ink-700 placeholder:text-ink-600',
+                  'w-full rounded-xl border px-3.5 py-3 text-sm outline-none transition-colors',
+                  'border-zinc-900/10 bg-white placeholder:text-zinc-400',
                   'focus-visible:border-accent-500 focus-visible:ring-2 focus-visible:ring-accent-500/30',
-                  field.secret ? 'text-gold-300 pr-10' : 'text-ink-100',
+                  'dark:border-white/10 dark:bg-zinc-900 dark:placeholder:text-zinc-600',
+                  field.secret
+                    ? 'pr-11 font-mono text-zinc-800 dark:text-gold-300'
+                    : 'text-zinc-900 dark:text-zinc-100',
                 ].join(' ')}
               />
               {field.secret && (
@@ -117,12 +169,12 @@ export function KeyForm({ provider }: Props) {
                   type="button"
                   onClick={() => toggleSecret(field.key)}
                   aria-label={showSecrets[field.key] ? 'Hide key' : 'Show key'}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-400 hover:text-ink-100 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 transition-colors hover:text-zinc-700 dark:hover:text-zinc-200"
                 >
                   {showSecrets[field.key] ? (
-                    <EyeOff className="w-4 h-4" />
+                    <EyeOff className="h-4 w-4" />
                   ) : (
-                    <Eye className="w-4 h-4" />
+                    <Eye className="h-4 w-4" />
                   )}
                 </button>
               )}
@@ -131,30 +183,65 @@ export function KeyForm({ provider }: Props) {
         )
       })}
 
-      <motion.button
+      <details className="group rounded-xl border border-zinc-900/8 bg-zinc-50/80 px-3.5 py-2.5 dark:border-white/8 dark:bg-white/[0.03]">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-xs font-medium text-zinc-500 marker:content-none [&::-webkit-details-marker]:hidden dark:text-zinc-400">
+          What we&apos;ll send
+          <ChevronDown className="h-3.5 w-3.5 flex-shrink-0 transition-transform group-open:rotate-180" />
+        </summary>
+        <div className="mt-2 overflow-x-auto font-mono text-[11px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+          <div className="whitespace-nowrap">{preview.requestLine}</div>
+          <div className="whitespace-nowrap">{preview.hostLine}</div>
+          {preview.authLines.map((line) => (
+            <div key={line} className="whitespace-nowrap text-zinc-700 dark:text-gold-400">
+              {line}
+            </div>
+          ))}
+        </div>
+      </details>
+
+      <button
         type="submit"
         disabled={isLoading}
-        whileHover={{ scale: isLoading ? 1 : 1.01 }}
-        whileTap={{ scale: isLoading ? 1 : 0.98 }}
-        className="group w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-accent-500 hover:bg-accent-400 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-mono font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
+        className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-600 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-300"
       >
-        {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-        {isLoading ? 'checking...' : 'run check'}
-        {!isLoading && (
-          <CornerDownLeft className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity" />
-        )}
-      </motion.button>
+        {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+        {isLoading ? 'Checking…' : 'Check key'}
+      </button>
 
       <AnimatePresence mode="wait">
         {(isLoading || result) && (
           <motion.div
             key={isLoading ? 'loading' : 'result'}
-            initial={{ opacity: 0, y: -6 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
+            exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.18 }}
+            className="space-y-3"
+            ref={resultRef}
           >
-            <ValidationResultDisplay result={result} isLoading={isLoading} />
+            <ValidationResultDisplay
+              result={result}
+              isLoading={isLoading}
+              providerName={provider.name}
+            />
+            {result && !isLoading && (
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={clearSelection}
+                  className="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+                >
+                  Check another key
+                </button>
+                <button
+                  type="button"
+                  onClick={() => changeProvider(currentSecret)}
+                  className="flex-1 rounded-xl border border-zinc-900/10 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500/50 dark:border-white/10 dark:text-zinc-200 dark:hover:bg-white/5"
+                >
+                  Change provider
+                </button>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

@@ -33,9 +33,8 @@ test.describe('LLM Key Checker', () => {
     await page.locator('#console').getByRole('button', { name: 'OpenAI' }).click()
     // Form should appear inline, in the same viewport, no scrolling/navigation needed
     await expect(page.getByLabel(/API Key/i)).toBeVisible()
-    await expect(page.getByRole('button', { name: /run check/i })).toBeVisible()
-    // Request preview shows the real endpoint being hit — appears both in the
-    // title bar and the request preview, so just confirm at least one is visible
+    await expect(page.getByRole('button', { name: /check key/i })).toBeVisible()
+    // Request preview host is shown in the checker header for a manual pick
     await expect(page.getByText(/api\.openai\.com/i).first()).toBeVisible()
   })
 
@@ -46,25 +45,27 @@ test.describe('LLM Key Checker', () => {
     await expect(page.getByLabel(/API Key/i)).toBeVisible()
   })
 
-  test('"change" link returns to provider picker', async ({ page }) => {
+  test('"Back" returns to provider picker', async ({ page }) => {
     await page.locator('#console').getByRole('button', { name: 'OpenAI' }).click()
     await expect(page.getByLabel(/API Key/i)).toBeVisible()
-    await page.getByRole('button', { name: 'change' }).click()
+    await page.getByRole('button', { name: /^back$/i }).click()
     await expect(page.locator('#console').getByRole('button', { name: 'OpenAI' })).toBeVisible()
   })
 
   test('submitting empty form does not proceed', async ({ page }) => {
     await page.locator('#console').getByRole('button', { name: 'OpenAI' }).click()
-    await page.getByRole('button', { name: /run check/i }).click()
+    await page.getByRole('button', { name: /check key/i }).click()
     // Required field validation prevents submission; button still present
-    await expect(page.getByRole('button', { name: /run check/i })).toBeVisible()
+    await expect(page.getByRole('button', { name: /check key/i })).toBeVisible()
   })
 
-  test('invalid key returns an error result', async ({ page }) => {
+  test('invalid key returns an error result and can start over', async ({ page }) => {
     await page.locator('#console').getByRole('button', { name: 'Groq' }).click()
     await page.getByLabel(/API Key/i).fill('invalid-test-key-12345')
-    await page.getByRole('button', { name: /run check/i }).click()
-    await expect(page.getByText(/result: invalid/i)).toBeVisible({ timeout: 15000 })
+    await page.getByRole('button', { name: /check key/i }).click()
+    await expect(page.getByText(/this key was rejected/i)).toBeVisible({ timeout: 15000 })
+    await page.getByRole('button', { name: /check another key/i }).click()
+    await expect(page.locator('#console').getByRole('button', { name: 'OpenAI' })).toBeVisible()
   })
 
   test('pasting a recognizable key auto-detects the provider and pre-fills it', async ({
@@ -76,6 +77,7 @@ test.describe('LLM Key Checker', () => {
     await expect(page.getByLabel(/API Key/i)).toHaveValue(
       'sk-ant-abcdefghijklmnopqrstuvwxyz0123456789'
     )
+    await page.getByText(/what we.ll send/i).click()
     // The correct provider-specific auth mechanism shows immediately, not a generic bearer header.
     await expect(page.getByText(/x-api-key/i)).toBeVisible()
   })
@@ -86,6 +88,21 @@ test.describe('LLM Key Checker', () => {
     const smartInput = page.getByPlaceholder(/search \d+ providers/i)
     await smartInput.fill('this-is-not-a-recognized-key-format-zzzzz')
     await expect(page.getByText(/couldn.t recognize this key/i)).toBeVisible()
+    await page.locator('#console').getByRole('button', { name: 'OpenAI' }).click()
+    await expect(page.getByLabel(/API Key/i)).toHaveValue(
+      'this-is-not-a-recognized-key-format-zzzzz'
+    )
+  })
+
+  test('generic sk- keys hint that other providers share the prefix', async ({ page }) => {
+    const smartInput = page.getByPlaceholder(/search \d+ providers/i)
+    await smartInput.fill('sk-abcdefghijklmnopqrstuvwxyz0123456789')
+    await expect(page.getByText(/auto-detected/i)).toBeVisible()
+    await expect(page.getByText(/OpenAI-style/i)).toBeVisible()
+    await page.locator('#console').getByRole('button', { name: 'DeepSeek' }).click()
+    await expect(page.getByLabel(/API Key/i)).toHaveValue(
+      'sk-abcdefghijklmnopqrstuvwxyz0123456789'
+    )
   })
 
   test('command palette opens with Ctrl+K and jumps to a section', async ({ page }) => {

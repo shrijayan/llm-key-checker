@@ -14,7 +14,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     step: '01',
     title: 'Paste your key',
     description:
-      'Drop a key into the console. We recognize the shape of well-known keys — like sk-ant- or AIzaSy — and pick the matching provider automatically.',
+      'Drop a key into the checker. We recognize the shape of well-known keys — like sk-ant- or AIzaSy — pick the matching provider, and run the check when the shape is unique.',
   },
   {
     step: '02',
