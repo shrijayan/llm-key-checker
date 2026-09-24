@@ -6,7 +6,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "agentcore",
+    "name": "Agentcore",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "aihubmix",
@@ -15,7 +41,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "aiml",
@@ -24,7 +56,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "aleph_alpha",
@@ -33,7 +71,28 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "anyscale",
+    "name": "Anyscale",
+    "baseUrl": "https://api.endpoints.anyscale.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "apertis",
@@ -42,7 +101,88 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "apiserpent",
+    "name": "Apiserpent",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "baseten",
+    "name": "Baseten",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "bing_grounding",
+    "name": "Bing Grounding",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "charity_engine",
+    "name": "Charity Engine",
+    "baseUrl": "https://api.charityengine.services/remotejobs/v2/inference",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "chutes",
@@ -51,7 +191,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "codestral",
@@ -60,7 +206,48 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "cognition",
+    "name": "Cognition",
+    "baseUrl": "https://api.cognition.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "cohere_chat",
+    "name": "Cohere Chat",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "crusoe",
@@ -69,7 +256,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "darkbloom",
@@ -78,7 +271,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "empiriolabs",
@@ -87,7 +286,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "fireworks_ai-embedding-models",
+    "name": "Fireworks Ai Embedding Models",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "friendliai",
@@ -96,7 +321,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "galadriel",
@@ -105,7 +336,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "gmi",
@@ -114,7 +351,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "gradient_ai",
@@ -123,8 +366,17 @@
     "corsEnabled": false,
     "category": "other",
     "fields": [
-      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.gradient.ai/v1", "secret": false },
-      { "key": "apiKey", "label": "API Key", "secret": true }
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.gradient.ai/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
     ]
   },
   {
@@ -134,7 +386,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "heroku",
+    "name": "Heroku",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "inception",
@@ -143,8 +421,57 @@
     "corsEnabled": false,
     "category": "other",
     "fields": [
-      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.inceptionlabs.ai/v1", "secret": false },
-      { "key": "apiKey", "label": "API Key", "secret": true }
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.inceptionlabs.ai/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "jina_ai",
+    "name": "Jina Ai",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "lemonade",
+    "name": "Lemonade",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "local",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
     ]
   },
   {
@@ -154,7 +481,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "llamagate",
@@ -163,7 +496,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "meta",
@@ -172,7 +511,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "morph",
@@ -181,8 +526,17 @@
     "corsEnabled": false,
     "category": "other",
     "fields": [
-      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://api.morph.so/v1", "secret": false },
-      { "key": "apiKey", "label": "API Key", "secret": true }
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.morph.so/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
     ]
   },
   {
@@ -192,7 +546,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "neosantara",
@@ -201,7 +561,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "chinese",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "nimble",
+    "name": "Nimble",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "nlp_cloud",
@@ -210,7 +596,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "nscale",
@@ -219,8 +611,37 @@
     "corsEnabled": false,
     "category": "other",
     "fields": [
-      { "key": "baseUrl", "label": "Base URL", "placeholder": "https://inference.nscale.com/v1", "secret": false },
-      { "key": "apiKey", "label": "API Key", "secret": true }
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://inference.nscale.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "one of https://docs.litellm.ai/docs/providers",
+    "name": "One Of Https://Docs.Litellm.Ai/Docs/Providers",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
     ]
   },
   {
@@ -230,7 +651,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "parallel_ai",
+    "name": "Parallel Ai",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "parasail",
@@ -239,7 +686,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "pinstripes",
@@ -248,7 +701,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "poe",
@@ -257,7 +716,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "predibase",
@@ -266,7 +731,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "publicai",
@@ -275,7 +746,53 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "qwen_ai_platform",
+    "name": "Qwen Ai Platform",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "qwencloud",
+    "name": "Qwencloud",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "sarvam",
@@ -284,7 +801,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "scaleway",
@@ -293,7 +816,28 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "scx-ai",
+    "name": "Scx Ai",
+    "baseUrl": "https://api.scx.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "synthetic",
@@ -302,7 +846,13 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "tensormesh",
@@ -311,7 +861,93 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "tinyfish",
+    "name": "Tinyfish",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "transcribe",
+    "name": "Transcribe",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "typesafe",
+    "name": "Typesafe",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "v0",
+    "name": "V0",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "veniceai",
@@ -320,7 +956,33 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "voyage",
+    "name": "Voyage",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   },
   {
     "id": "xiaomi_mimo",
@@ -329,6 +991,12 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "chinese",
-    "fields": [{ "key": "apiKey", "label": "API Key", "secret": true }]
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
   }
 ]
