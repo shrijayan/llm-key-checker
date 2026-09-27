@@ -795,6 +795,21 @@
     ]
   },
   {
+    "id": "sail",
+    "name": "Sail",
+    "baseUrl": "https://api.sailresearch.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "sarvam",
     "name": "Sarvam AI",
     "baseUrl": "https://api.sarvam.ai/v1",
