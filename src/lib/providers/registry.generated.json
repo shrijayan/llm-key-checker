@@ -740,6 +740,21 @@
     ]
   },
   {
+    "id": "prism",
+    "name": "Prism",
+    "baseUrl": "https://api.prisminference.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "publicai",
     "name": "Public AI",
     "baseUrl": "https://api.publicai.co/v1",
