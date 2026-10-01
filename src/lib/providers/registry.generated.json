@@ -250,6 +250,21 @@
     ]
   },
   {
+    "id": "cortecs",
+    "name": "Cortecs",
+    "baseUrl": "https://api.cortecs.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "crusoe",
     "name": "Crusoe",
     "baseUrl": "https://managed-inference-api-proxy.crusoecloud.com/v1",
