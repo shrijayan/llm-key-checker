@@ -150,6 +150,26 @@
     ]
   },
   {
+    "id": "bespoke",
+    "name": "Bespoke",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "bing_grounding",
     "name": "Bing Grounding",
     "authType": "bearer",
@@ -452,6 +472,26 @@
   {
     "id": "jina_ai",
     "name": "Jina Ai",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "laya",
+    "name": "Laya",
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
