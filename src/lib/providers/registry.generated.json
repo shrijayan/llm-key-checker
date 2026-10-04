@@ -925,6 +925,26 @@
     ]
   },
   {
+    "id": "strands_decider",
+    "name": "Strands Decider",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "synthetic",
     "name": "Synthetic AI",
     "baseUrl": "https://api.synthetic.new/openai/v1",
