@@ -865,6 +865,21 @@
     ]
   },
   {
+    "id": "reka",
+    "name": "Reka",
+    "baseUrl": "https://api.reka.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "sail",
     "name": "Sail",
     "baseUrl": "https://api.sailresearch.com/v1",
