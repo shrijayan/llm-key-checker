@@ -270,6 +270,21 @@
     ]
   },
   {
+    "id": "coralbricks",
+    "name": "Coralbricks",
+    "baseUrl": "https://inference.coralbricks.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "cortecs",
     "name": "Cortecs",
     "baseUrl": "https://api.cortecs.ai/v1",
