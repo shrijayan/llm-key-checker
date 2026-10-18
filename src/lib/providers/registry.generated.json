@@ -770,6 +770,21 @@
     ]
   },
   {
+    "id": "openinfer",
+    "name": "Openinfer",
+    "baseUrl": "https://api.openinfer.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "ovhcloud",
     "name": "OVH Cloud",
     "baseUrl": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
