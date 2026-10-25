@@ -770,6 +770,26 @@
     ]
   },
   {
+    "id": "opencode_go",
+    "name": "Opencode Go",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "openinfer",
     "name": "Openinfer",
     "baseUrl": "https://api.openinfer.ai/v1",
