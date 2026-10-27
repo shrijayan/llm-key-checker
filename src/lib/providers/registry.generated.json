@@ -970,6 +970,21 @@
     ]
   },
   {
+    "id": "refuseless",
+    "name": "Refuseless",
+    "baseUrl": "https://api.refuseless.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "reka",
     "name": "Reka",
     "baseUrl": "https://api.reka.ai/v1",
