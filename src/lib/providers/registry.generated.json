@@ -65,6 +65,21 @@
     ]
   },
   {
+    "id": "aiand",
+    "name": "Aiand",
+    "baseUrl": "https://api.aiand.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "aleph_alpha",
     "name": "Aleph Alpha",
     "baseUrl": "https://api.aleph-alpha.com/v1",
