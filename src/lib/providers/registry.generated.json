@@ -185,6 +185,26 @@
     ]
   },
   {
+    "id": "bigmodel",
+    "name": "Bigmodel",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "bing_grounding",
     "name": "Bing Grounding",
     "authType": "bearer",
@@ -527,6 +547,21 @@
         "placeholder": "https://api.example.com/v1",
         "secret": false
       },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "kyma",
+    "name": "Kyma",
+    "baseUrl": "https://kymaapi.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
       {
         "key": "apiKey",
         "label": "API Key",
@@ -1115,6 +1150,21 @@
     ]
   },
   {
+    "id": "streamlake",
+    "name": "Streamlake",
+    "baseUrl": "https://vanchin.streamlake.ai/api/gateway/v1/endpoints",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "synthetic",
     "name": "Synthetic AI",
     "baseUrl": "https://api.synthetic.new/openai/v1",
@@ -1266,6 +1316,21 @@
     "authType": "bearer",
     "corsEnabled": false,
     "category": "chinese",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "zerogpu",
+    "name": "Zerogpu",
+    "baseUrl": "https://api.zerogpu.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
     "fields": [
       {
         "key": "apiKey",
