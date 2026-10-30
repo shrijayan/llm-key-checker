@@ -255,6 +255,26 @@
     ]
   },
   {
+    "id": "clf_ai_gateway",
+    "name": "Clf Ai Gateway",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "codestral",
     "name": "Codestral (Mistral)",
     "baseUrl": "https://codestral.mistral.ai/v1",
@@ -372,6 +392,26 @@
     "corsEnabled": false,
     "category": "other",
     "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "eu_jev",
+    "name": "Eu Jev",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
       {
         "key": "apiKey",
         "label": "API Key",
