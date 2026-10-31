@@ -540,6 +540,21 @@
     ]
   },
   {
+    "id": "hostinger_router",
+    "name": "Hostinger Router",
+    "baseUrl": "https://router.hostinger.com/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "inception",
     "name": "Inception Labs",
     "authType": "bearer",
