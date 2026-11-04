@@ -1365,6 +1365,21 @@
     ]
   },
   {
+    "id": "wally",
+    "name": "Wally",
+    "baseUrl": "https://inference.runanywhere.ai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "xiaomi_mimo",
     "name": "Xiaomi MiMo",
     "baseUrl": "https://api.xiaomimimo.com/v1",
