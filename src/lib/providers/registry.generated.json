@@ -1380,6 +1380,26 @@
     ]
   },
   {
+    "id": "webiq",
+    "name": "Webiq",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "xiaomi_mimo",
     "name": "Xiaomi MiMo",
     "baseUrl": "https://api.xiaomimimo.com/v1",
