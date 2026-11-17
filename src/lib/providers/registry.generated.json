@@ -1345,6 +1345,21 @@
     ]
   },
   {
+    "id": "vispark",
+    "name": "Vispark",
+    "baseUrl": "https://api.lab.vispark.in/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "voyage",
     "name": "Voyage",
     "authType": "bearer",
