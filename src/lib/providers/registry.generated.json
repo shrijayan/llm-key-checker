@@ -1105,6 +1105,21 @@
     ]
   },
   {
+    "id": "resetdata",
+    "name": "Resetdata",
+    "baseUrl": "https://api.resetdata.ai/api/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "sail",
     "name": "Sail",
     "baseUrl": "https://api.sailresearch.com/v1",
