@@ -505,6 +505,26 @@
     ]
   },
   {
+    "id": "gradium",
+    "name": "Gradium",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "helicone",
     "name": "Helicone",
     "baseUrl": "https://ai-gateway.helicone.ai/",
