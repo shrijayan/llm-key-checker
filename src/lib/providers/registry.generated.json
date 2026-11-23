@@ -485,6 +485,26 @@
     ]
   },
   {
+    "id": "gnani",
+    "name": "Gnani",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "baseUrl",
+        "label": "Base URL",
+        "placeholder": "https://api.example.com/v1",
+        "secret": false
+      },
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "gradient_ai",
     "name": "Gradient AI",
     "authType": "bearer",
@@ -968,6 +988,21 @@
     "id": "parasail",
     "name": "Parasail",
     "baseUrl": "https://api.parasail.io/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
+    "id": "perplexity_orchestrator",
+    "name": "Perplexity Orchestrator",
+    "baseUrl": "https://api.perplexity.ai/orchestrator/v1",
     "authType": "bearer",
     "corsEnabled": false,
     "category": "other",
