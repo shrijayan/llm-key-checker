@@ -595,6 +595,21 @@
     ]
   },
   {
+    "id": "huawei_maas",
+    "name": "Huawei Maas",
+    "baseUrl": "https://api-ap-southeast-1.modelarts-maas.com/openai/v1",
+    "authType": "bearer",
+    "corsEnabled": false,
+    "category": "other",
+    "fields": [
+      {
+        "key": "apiKey",
+        "label": "API Key",
+        "secret": true
+      }
+    ]
+  },
+  {
     "id": "inception",
     "name": "Inception Labs",
     "authType": "bearer",
